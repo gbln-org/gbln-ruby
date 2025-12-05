@@ -190,10 +190,15 @@ module GBLN
 
     # I/O functions (from ticket #006)
     attach_function :gbln_config_new, [:bool, :bool, :uint8, :size_t, :bool], :gbln_config_ptr
+    attach_function :gbln_config_new_io, [], :gbln_config_ptr
+    attach_function :gbln_config_new_source, [], :gbln_config_ptr
+    attach_function :gbln_config_free, [:gbln_config_ptr], :void
+    attach_function :gbln_config_set_mini_mode, [:gbln_config_ptr, :uint8], :void
+    attach_function :gbln_config_set_compress, [:gbln_config_ptr, :uint8], :void
+    attach_function :gbln_config_set_compression_level, [:gbln_config_ptr, :uint8], :void
+    attach_function :gbln_config_set_indent, [:gbln_config_ptr, :size_t], :void
+    attach_function :gbln_config_set_strip_comments, [:gbln_config_ptr, :uint8], :void
     attach_function :gbln_write_io, [:gbln_value_ptr, :string, :gbln_config_ptr], :gbln_error_code
     attach_function :gbln_read_io, [:string, :pointer], :gbln_error_code
-
-    # File I/O helper (parse file)
-    attach_function :gbln_parse_file, [:string, :pointer], :gbln_error_code
   end
 end

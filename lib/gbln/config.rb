@@ -73,11 +73,11 @@ module GBLN
       end
 
       unless @compression_level.is_a?(Integer) && @compression_level.between?(0, 9)
-        raise ValidationError, "compression_level must be 0-9, got: #{@compression_level}"
+        raise ArgumentError, "compression_level must be between 0 and 9, got: #{@compression_level}"
       end
 
-      unless @indent.is_a?(Integer) && @indent.positive?
-        raise ValidationError, "indent must be positive integer, got: #{@indent}"
+      unless @indent.is_a?(Integer) && @indent.between?(0, 8)
+        raise ArgumentError, "indent must be between 0 and 8, got: #{@indent}"
       end
 
       unless [true, false].include?(@strip_comments)

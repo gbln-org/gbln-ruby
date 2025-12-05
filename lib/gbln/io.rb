@@ -34,8 +34,14 @@ module GBLN
     def self.read_io(path)
       raise ArgumentError, "Path cannot be nil" if path.nil?
       raise ArgumentError, "Path must be a String" unless path.is_a?(String)
-      raise GBLN::IOError, "File does not exist: #{path}" unless File.exist?(path)
-      raise GBLN::IOError, "Path is a directory: #{path}" if File.directory?(path)
+
+      unless File.exist?(path)
+        raise GBLN::IOError, "File does not exist: #{path}"
+      end
+
+      if File.directory?(path)
+        raise GBLN::IOError, "Path is a directory: #{path}"
+      end
 
       # Ensure path is absolute for FFI
       absolute_path = File.absolute_path(path)
@@ -69,8 +75,6 @@ module GBLN
 
       # Convert to Ruby and return
       ValueConversion.to_ruby(auto_ptr)
-    rescue ::FFI::Error => e
-      raise GBLN::Error, "FFI error: #{e.message}"
     end
 
     # Write Ruby data to a GBLN I/O file (.io.gbln.xz)
@@ -141,8 +145,6 @@ module GBLN
       end
 
       nil
-    rescue ::FFI::Error => e
-      raise GBLN::Error, "FFI error: #{e.message}"
     end
 
     # Extract the last error message from the C library
@@ -166,16 +168,15 @@ module GBLN
     # @raise [GBLN::Error] If config creation fails
     # @api private
     def self.create_c_config(config)
-      c_config = FFI.gbln_config_create
+      c_config = FFI.gbln_config_new(
+        config.mini_mode,
+        config.compress,
+        config.compression_level,
+        config.indent,
+        config.strip_comments
+      )
 
       raise GBLN::Error, "Failed to create C config structure" if c_config.null?
-
-      # Set configuration options
-      FFI.gbln_config_set_mini_mode(c_config, config.mini_mode ? 1 : 0)
-      FFI.gbln_config_set_compress(c_config, config.compress ? 1 : 0)
-      FFI.gbln_config_set_compression_level(c_config, config.compression_level)
-      FFI.gbln_config_set_indent(c_config, config.indent)
-      FFI.gbln_config_set_strip_comments(c_config, config.strip_comments ? 1 : 0)
 
       c_config
     rescue StandardError => e
