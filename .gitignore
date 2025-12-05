@@ -1,0 +1,39 @@
+# Build outputs
+dist/
+build/
+*.so
+*.dylib
+*.dll
+*.a
+*.lib
+*.gem
+pkg/
+
+# Dependencies
+vendor/bundle/
+.bundle/
+
+# Test coverage
+coverage/
+.rspec_status
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.ruby-lsp/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Ruby version managers
+.ruby-version
+.rvmrc
+
+# Temporary files
+tmp/
+.byebug_history
