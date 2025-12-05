@@ -37,3 +37,7 @@ Thumbs.db
 # Temporary files
 tmp/
 .byebug_history
+
+# Test artifacts
+test_results.txt
+*.io.gbln.xz
